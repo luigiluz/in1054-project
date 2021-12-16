@@ -20,3 +20,6 @@ venv:
 
 requirements:
 	$(PIP) install $(REQUIREMENTS)
+
+parse:
+	$(PYTHON) scripts/parser_script.py
