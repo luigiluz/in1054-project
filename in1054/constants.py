@@ -11,6 +11,8 @@ COLUMNS_NAMES = ["timestamp",
                  "data[7]",
                  "flag"]
 
-REGULAR_FLAG = "R"
+# if regular -> REGULAR_FLAG = 0
+# if anomalous -> REGULAR_FLAG = 1
+REGULAR_FLAG = 0
 
 filename = "normal_run_data.txt"
