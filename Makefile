@@ -23,3 +23,6 @@ requirements:
 
 parse:
 	$(PYTHON) scripts/parser_script.py
+
+preprocess:
+	$(PYTHON) scripts/preprocessing_script.py

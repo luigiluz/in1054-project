@@ -1,3 +1,5 @@
+FLAG_COLUMN_NAME = "flag"
+
 COLUMNS_NAMES = ["timestamp",
                  "id",
                  "dlc",
@@ -9,10 +11,12 @@ COLUMNS_NAMES = ["timestamp",
                  "data[5]",
                  "data[6]",
                  "data[7]",
-                 "flag"]
+                 FLAG_COLUMN_NAME]
 
 # if regular -> REGULAR_FLAG = 0
 # if anomalous -> REGULAR_FLAG = 1
 REGULAR_FLAG = 0
 
-filename = "normal_run_data.txt"
+ROOT_PATH = "/home/luigiluz/Documents/cin/github/in1054-project"
+NORMAL_RUN_DATA_TXT_PATH = ROOT_PATH + "/data/normal_run_data.txt"
+NORMAL_RUN_DATA_CSV_PATH = ROOT_PATH + "/data/normal_run_data.csv"
