@@ -1,6 +1,4 @@
-import pandas as pd
 import numpy as np
-from scipy.sparse import data
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
