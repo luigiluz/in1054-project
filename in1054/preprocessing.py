@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
@@ -40,6 +41,5 @@ def preprocess(dataframe, output_filepath):
   dimesionality_reduced_array = standardize(dataframe)
   dimesionality_reduced_array = np.round(dimesionality_reduced_array, 4)
   converted_array = convert_to_comma_separated_string(dimesionality_reduced_array)
-
-  with open(output_filepath, "w") as output:
-    output.write(str(converted_array))
+  converted_df = pd.DataFrame(converted_array, columns = ['concatenated_features'])
+  converted_df.to_csv(output_filepath, index=False)

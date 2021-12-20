@@ -20,4 +20,4 @@ REGULAR_FLAG = 0
 ROOT_PATH = "/home/luigiluz/Documents/cin/github/in1054-project"
 NORMAL_RUN_DATA_TXT_PATH = ROOT_PATH + "/data/normal_run_data.txt"
 NORMAL_RUN_DATA_CSV_PATH = ROOT_PATH + "/data/normal_run_data.csv"
-NORMAL_RUN_DATA_JOINED_PATH = ROOT_PATH + "/data/normal_run_data_joined.txt"
+NORMAL_RUN_DATA_JOINED_PATH = ROOT_PATH + "/data/normal_run_data_joined.csv"
