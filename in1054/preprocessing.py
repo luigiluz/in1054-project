@@ -25,6 +25,7 @@ def convert_to_comma_separated_string(array):
   converted_array = []
 
   for line in range(0, n_rows):
+    print(str(line) + "/" + str(n_rows))
     converted_list = [str(element) for element in array[line, :]]
     joined_string = ",".join(converted_list)
     converted_array.append(joined_string)
