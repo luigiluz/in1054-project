@@ -38,11 +38,25 @@ def convert_line_to_frame_vector(line):
 
 def parse(filename, output_filepath):
   contents = load_txt_file(filename)
-  contents_df = pd.DataFrame(columns=consts.COLUMNS_NAMES)
+  total_len = len(contents)
+  line_counter = 0
+
+  frame_list = []
 
   for line in contents:
+    print(str(line_counter) + "/" + str(total_len))
+    print(line)
+    line_counter = line_counter + 1
+
     frame_vector = convert_line_to_frame_vector(line)
-    frame_df = pd.DataFrame([frame_vector], columns=consts.COLUMNS_NAMES)
-    contents_df = contents_df.append(frame_df, ignore_index=True)
+    frame_list.append(frame_vector)
+
+  # for line_index in range(0, 50):
+  #   frame_vector = convert_line_to_frame_vector(contents[line_index])
+  #   frame_list.append(frame_vector)
+  #   #frame_df = pd.DataFrame([frame_vector], columns=consts.COLUMNS_NAMES)
+  #   #contents_df = contents_df.append(frame_df, ignore_index=True)
+
+  contents_df = pd.DataFrame(frame_list, columns=consts.COLUMNS_NAMES)
 
   contents_df.to_csv(output_filepath, index=False)
