@@ -14,23 +14,23 @@ def convert_line_to_frame_vector(line):
   n_of_values = len(splitted_line)
 
   timestamp = splitted_line[1]
-  id = "0x" + splitted_line[3]
+  id = splitted_line[3]
   dlc = splitted_line[6]
   data = ["00", "00", "00", "00", "00", "00", "00", "00"]
   for index in range(7, n_of_values):
-    data[index - 7] = "0x" + splitted_line[index]
+    data[index - 7] = splitted_line[index]
 
   frame_vector = [timestamp,
-                  int(id, 16),
+                  id,
                   dlc,
-                  int(data[0], 16),
-                  int(data[1], 16),
-                  int(data[2], 16),
-                  int(data[3], 16),
-                  int(data[4], 16),
-                  int(data[5], 16),
-                  int(data[6], 16),
-                  int(data[7], 16),
+                  data[0],
+                  data[1],
+                  data[2],
+                  data[3],
+                  data[4],
+                  data[5],
+                  data[6],
+                  data[7],
                   consts.REGULAR_FLAG]
 
   return frame_vector
