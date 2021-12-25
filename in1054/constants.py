@@ -23,6 +23,18 @@ COLUMNS_NAMES = ["timestamp",
                  DATA_7_COLUMN_NAME,
                  FLAG_COLUMN_NAME]
 
+COLUMNS_TO_CONVERT = [
+                ID_COLUMN_NAME,
+                DATA_0_COLUMN_NAME,
+                DATA_1_COLUMN_NAME,
+                DATA_2_COLUMN_NAME,
+                DATA_3_COLUMN_NAME,
+                DATA_4_COLUMN_NAME,
+                DATA_5_COLUMN_NAME,
+                DATA_6_COLUMN_NAME,
+                DATA_7_COLUMN_NAME
+]
+
 # if regular -> REGULAR_FLAG = 0
 # if anomalous -> REGULAR_FLAG = 1
 REGULAR_FLAG = 0

@@ -78,19 +78,7 @@ def parse(filename, output_filepath):
   #   #frame_df = pd.DataFrame([frame_vector], columns=consts.COLUMNS_NAMES)
   #   #contents_df = contents_df.append(frame_df, ignore_index=True)
 
-  columns_to_convert = [
-    consts.ID_COLUMN_NAME,
-    consts.DATA_0_COLUMN_NAME,
-    consts.DATA_1_COLUMN_NAME,
-    consts.DATA_2_COLUMN_NAME,
-    consts.DATA_3_COLUMN_NAME,
-    consts.DATA_4_COLUMN_NAME,
-    consts.DATA_5_COLUMN_NAME,
-    consts.DATA_6_COLUMN_NAME,
-    consts.DATA_7_COLUMN_NAME
-  ]
-
   contents_df = pd.DataFrame(frame_list, columns=consts.COLUMNS_NAMES)
-  contents_df = convert_cols_from_hex_string_to_int(contents_df, columns_to_convert)
+  contents_df = convert_cols_from_hex_string_to_int(contents_df, consts.COLUMNS_TO_CONVERT)
 
   contents_df.to_csv(output_filepath, index=False)
