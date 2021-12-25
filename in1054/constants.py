@@ -1,5 +1,6 @@
 FLAG_COLUMN_NAME = "flag"
 ID_COLUMN_NAME = "id"
+DLC_COLUMN_NAME = "dlc"
 DATA_0_COLUMN_NAME = "data[0]"
 DATA_1_COLUMN_NAME = "data[1]"
 DATA_2_COLUMN_NAME = "data[2]"
@@ -11,7 +12,7 @@ DATA_7_COLUMN_NAME = "data[7]"
 
 COLUMNS_NAMES = ["timestamp",
                  ID_COLUMN_NAME,
-                 "dlc",
+                 DLC_COLUMN_NAME,
                  DATA_0_COLUMN_NAME,
                  DATA_1_COLUMN_NAME,
                  DATA_2_COLUMN_NAME,
