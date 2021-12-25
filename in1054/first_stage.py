@@ -19,7 +19,6 @@ def _convert_bloom_filter_results(results):
 
 
 def povoate_bloom_filter(normal_dataframe, bf_filename=None):
-	# concatenated_features_df = pd.read_csv(input_filename)
 	concatenated_features_df = normal_dataframe.copy()
 	concatenated_features_array = concatenated_features_df.loc[:, consts.CONCATENATED_FEATURES_COLUMN_NAME].values
 

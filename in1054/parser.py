@@ -72,12 +72,6 @@ def parse(filename, output_filepath):
     frame_vector = convert_line_to_frame_vector(line)
     frame_list.append(frame_vector)
 
-  # for line_index in range(0, 50):
-  #   frame_vector = convert_line_to_frame_vector(contents[line_index])
-  #   frame_list.append(frame_vector)
-  #   #frame_df = pd.DataFrame([frame_vector], columns=consts.COLUMNS_NAMES)
-  #   #contents_df = contents_df.append(frame_df, ignore_index=True)
-
   contents_df = pd.DataFrame(frame_list, columns=consts.COLUMNS_NAMES)
   contents_df = convert_cols_from_hex_string_to_int(contents_df, consts.COLUMNS_TO_CONVERT)
 
