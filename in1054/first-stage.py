@@ -7,7 +7,7 @@ def povoate_bloom_filter(input_filename):
 
 	# TODO: Update filter capacity based on the amount of data used to create
 	# normal state representation
-	fs_bloomfilter = pybloomfilter.BloomFilter(capacity=1000, error_rate=0.01)
+	fs_bloomfilter = pybloomfilter.BloomFilter(capacity=1000000, error_rate=0.01)
 
 	for feature in concatenated_features_array:
 		fs_bloomfilter.add(feature.encode())
