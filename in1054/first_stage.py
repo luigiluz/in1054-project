@@ -1,9 +1,11 @@
 import pybloomfilter
 
+import in1054.constants as consts
+
 def povoate_bloom_filter(normal_dataframe, bf_filename=None):
 	# concatenated_features_df = pd.read_csv(input_filename)
 	concatenated_features_df = normal_dataframe.copy()
-	concatenated_features_array = concatenated_features_df.loc[:, "concatenated_features"].values
+	concatenated_features_array = concatenated_features_df.loc[:, consts.CONCATENATED_FEATURES_COLUMN_NAME].values
 
 	# TODO: Update filter capacity based on the amount of data used to create
 	# normal state representation
@@ -18,7 +20,7 @@ def povoate_bloom_filter(normal_dataframe, bf_filename=None):
 def check_bloomfilter(eval_dataframe, bloomfilter):
 	tmp_df = eval_dataframe.copy()
 
-	words_array = tmp_df.loc[:, "concatenated_features"].values
+	words_array = tmp_df.loc[:, consts.CONCATENATED_FEATURES_COLUMN_NAME].values
 	words_array = words_array.tolist()
 
 	bf_results = []

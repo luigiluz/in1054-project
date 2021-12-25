@@ -63,7 +63,7 @@ def preprocess(dataframe, output_filepath=None):
   dimesionality_reduced_array = np.round(dimesionality_reduced_array, 4)
 
   converted_array = convert_to_comma_separated_string(dimesionality_reduced_array)
-  converted_df = pd.DataFrame(converted_array, columns = ['concatenated_features'])
+  converted_df = pd.DataFrame(converted_array, columns = [consts.CONCATENATED_FEATURES_COLUMN_NAME])
 
   if (output_filepath==None):
     return converted_df
