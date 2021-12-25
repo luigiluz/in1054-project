@@ -40,7 +40,16 @@ def convert_to_comma_separated_string(array):
   return converted_array
 
 
-def preprocess(dataframe, output_filepath):
+def convert_results_to_int(dataframe):
+  tmp_df = dataframe.copy()
+
+  tmp_df[tmp_df[consts.FLAG_COLUMN_NAME] == consts.REGULAR_FLAG_STR] = consts.REGULAR_FLAG_INT
+  tmp_df[tmp_df[consts.FLAG_COLUMN_NAME] == consts.INJECTED_FLAG_STR] = consts.INJECTED_FLAG_INT
+
+  return tmp_df
+
+
+def preprocess(dataframe, output_filepath=None):
   tmp_df = dataframe.copy()
 
   filtered_df = filter_by_dlc(tmp_df, 8)
@@ -55,5 +64,8 @@ def preprocess(dataframe, output_filepath):
 
   converted_array = convert_to_comma_separated_string(dimesionality_reduced_array)
   converted_df = pd.DataFrame(converted_array, columns = ['concatenated_features'])
+
+  if (output_filepath==None):
+    return converted_df
 
   converted_df.to_csv(output_filepath, index=False)

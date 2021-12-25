@@ -26,3 +26,6 @@ parse:
 
 preprocess:
 	$(PYTHON) scripts/preprocessing_script.py
+
+eval_first_stage:
+	$(PYTHON) scripts/first_stage_eval_script.py

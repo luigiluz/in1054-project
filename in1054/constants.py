@@ -37,9 +37,16 @@ COLUMNS_TO_CONVERT = [
 
 # if regular -> REGULAR_FLAG = 0
 # if anomalous -> REGULAR_FLAG = 1
-REGULAR_FLAG = 0
+REGULAR_FLAG_INT = 0
+INJECTED_FLAG_INT = 1
+
+REGULAR_FLAG_STR = "R"
+INJECTED_FLAG_STR = "T"
+
+CONCATENATED_FEATURES_COLUMN_NAME = "concatenated_features"
 
 ROOT_PATH = "/home/luigiluz/Documents/cin/github/in1054-project"
 NORMAL_RUN_DATA_TXT_PATH = ROOT_PATH + "/data/normal_run_data.txt"
 NORMAL_RUN_DATA_CSV_PATH = ROOT_PATH + "/data/normal_run_data.csv"
 NORMAL_RUN_DATA_JOINED_PATH = ROOT_PATH + "/data/normal_run_data_joined.csv"
+DOS_DATA_CSV_PATH = ROOT_PATH + "/data/DoS_dataset.csv"
