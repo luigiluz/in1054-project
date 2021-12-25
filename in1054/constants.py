@@ -1,16 +1,25 @@
 FLAG_COLUMN_NAME = "flag"
+ID_COLUMN_NAME = "id"
+DATA_0_COLUMN_NAME = "data[0]"
+DATA_1_COLUMN_NAME = "data[1]"
+DATA_2_COLUMN_NAME = "data[2]"
+DATA_3_COLUMN_NAME = "data[3]"
+DATA_4_COLUMN_NAME = "data[4]"
+DATA_5_COLUMN_NAME = "data[5]"
+DATA_6_COLUMN_NAME = "data[6]"
+DATA_7_COLUMN_NAME = "data[7]"
 
 COLUMNS_NAMES = ["timestamp",
-                 "id",
+                 ID_COLUMN_NAME,
                  "dlc",
-                 "data[0]",
-                 "data[1]",
-                 "data[2]",
-                 "data[3]",
-                 "data[4]",
-                 "data[5]",
-                 "data[6]",
-                 "data[7]",
+                 DATA_0_COLUMN_NAME,
+                 DATA_1_COLUMN_NAME,
+                 DATA_2_COLUMN_NAME,
+                 DATA_3_COLUMN_NAME,
+                 DATA_4_COLUMN_NAME,
+                 DATA_5_COLUMN_NAME,
+                 DATA_6_COLUMN_NAME,
+                 DATA_7_COLUMN_NAME,
                  FLAG_COLUMN_NAME]
 
 # if regular -> REGULAR_FLAG = 0
