@@ -14,7 +14,7 @@ def convert_line_to_frame_vector(line):
   n_of_values = len(splitted_line)
 
   timestamp = splitted_line[1]
-  id = splitted_line[3]
+  id = "0x" + splitted_line[3]
   dlc = splitted_line[6]
   data = ["00", "00", "00", "00", "00", "00", "00", "00"]
   for index in range(7, n_of_values):
