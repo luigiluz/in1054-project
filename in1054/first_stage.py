@@ -2,6 +2,22 @@ import pybloomfilter
 
 import in1054.constants as consts
 
+def _convert_bloom_filter_results(results):
+	# Logical inversion of results
+	# 0 means that is not in bloom filter
+	# 1 means that it is in bloom filter
+	inverted_results = [not elem for elem in results]
+	# Now:
+	# 0 means that is a regular frame
+	# 1 means that is an injected frame
+
+	# Convert boolean list to int list
+	integer_map = map(int, inverted_results)
+	results_as_int = list(integer_map)
+
+	return results_as_int
+
+
 def povoate_bloom_filter(normal_dataframe, bf_filename=None):
 	# concatenated_features_df = pd.read_csv(input_filename)
 	concatenated_features_df = normal_dataframe.copy()
@@ -29,17 +45,6 @@ def check_bloomfilter(eval_dataframe, bloomfilter):
 		single_result = word.encode() in bloomfilter
 		bf_results.append(single_result)
 
-	# TODO: Move these manipulations to other functions
-	# Logical inversion of results
-	# 0 means that is not in bloom filter
-	# 1 means that it is in bloom filter
-	inverted_bf_results = [not elem for elem in bf_results]
-	# Now:
-	# 0 means that is a regular frame
-	# 1 means that is an injected frame
+	results_as_int = _convert_bloom_filter_results(bf_results)
 
-	# Convert boolean list to int list
-	integer_map = map(int, inverted_bf_results)
-	bf_int_results = list(integer_map)
-
-	return bf_int_results
+	return results_as_int
