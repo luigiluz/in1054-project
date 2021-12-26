@@ -35,6 +35,13 @@ COLUMNS_TO_CONVERT = [
                 DATA_7_COLUMN_NAME
 ]
 
+METRICS_COLUMNS = [
+                "accuracy",
+                "precision",
+                "recall",
+                "f1 score"
+                ]
+
 # if regular -> REGULAR_FLAG = 0
 # if anomalous -> REGULAR_FLAG = 1
 REGULAR_FLAG_INT = 0

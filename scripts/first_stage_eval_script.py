@@ -1,8 +1,4 @@
 import pandas as pd
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import precision_score
-from sklearn.metrics import f1_score
 
 import in1054.constants as consts
 import in1054.preprocessing as preprocessing
@@ -42,31 +38,14 @@ def main():
 
 	# get bloom filter results
 	bf_results = first_stage.check_bloomfilter(dos_df, fs_bloomfilter)
-	# 0 means that is not in bloom filter
-	# 1 means that it is in bloom filter
-	# print("bloom filter results")
-	# print(bf_results)
 
 	# evaluate bloom filter results
 	conf_matrix = metrics.conf_matrix(dos_results, bf_results)
 	print("confusion matrix")
 	print(conf_matrix)
 
-	accuracy = accuracy_score(dos_results, bf_results)
-	print("accuracy")
-	print(accuracy)
-
-	precision = precision_score(dos_results, bf_results)
-	print("precision")
-	print(precision)
-
-	recall = recall_score(dos_results, bf_results)
-	print("recall")
-	print(recall)
-
-	f1_score_metric = f1_score(dos_results, bf_results)
-	print("f1 score")
-	print(f1_score_metric)
+	metrics_df = metrics.classification_metrics(dos_results, bf_results)
+	print(metrics_df)
 
 
 if __name__ == "__main__":
