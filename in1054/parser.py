@@ -31,7 +31,7 @@ def convert_line_to_frame_vector(line):
                   data[5],
                   data[6],
                   data[7],
-                  consts.REGULAR_FLAG]
+                  consts.REGULAR_FLAG_STR]
 
   return frame_vector
 
