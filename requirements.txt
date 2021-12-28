@@ -16,3 +16,4 @@ pep517==0.10.0
 setuptools==57.0.0
 pybloomfiltermmap==0.3.15
 git+https://github.com/jaybaird/python-bloomfilter
+tensorflow==2.7.0

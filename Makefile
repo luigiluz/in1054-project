@@ -29,3 +29,6 @@ preprocess:
 
 eval_first_stage:
 	$(PYTHON) scripts/first_stage_eval_script.py
+
+eval_second_stage:
+	$(PYTHON) scripts/second_stage_eval_script.py
