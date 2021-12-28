@@ -9,9 +9,11 @@ import in1054.metrics as metrics
 def main():
 	# load normal dataframe
 	normal_joined_df = pd.read_csv(consts.NORMAL_RUN_DATA_JOINED_PATH)
+	print("normal_joined_df")
+	print(normal_joined_df.head(10))
 
 	# load malicious dataframe
-	dos_df = pd.read_csv(consts.DOS_DATA_CSV_PATH, names=consts.COLUMNS_NAMES)
+	dos_df = pd.read_csv(consts.DOS_DATA_CSV_PATH, names=consts.COLUMNS_NAMES, index_col=0)
 	# filter dlc columns
 	dos_df = preprocessing.filter_by_dlc(dos_df, 8)
 	print("dos_df")
