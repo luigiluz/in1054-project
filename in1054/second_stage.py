@@ -2,6 +2,16 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.layers import TextVectorization
 from tensorflow.keras import layers
+import re
+import string
+
+def custom_standardization(input_data):
+	stripped_input = tf.strings.regex_replace(input_data,',',' ')
+
+	return tf.strings.regex_replace(stripped_input,
+									'[%s]' % re.escape(string.punctuation),
+									'')
+
 
 def _convert_df_to_numpy_array(dataframe):
 
@@ -11,7 +21,12 @@ def _convert_df_to_numpy_array(dataframe):
 # TODO: Consider moving this to a layer of the neural network
 def _convert_text_to_tensor(text_data_array):
 
-	vectorizer = TextVectorization(output_mode="binary", ngrams=2)
+	vectorizer = TextVectorization(
+									standardize=custom_standardization,
+									output_mode="int",
+									max_tokens=255,
+									output_sequence_length=10
+									)
 	vectorizer.adapt(text_data_array)
 	binary_data = vectorizer(text_data_array)
 
@@ -29,7 +44,7 @@ def prepare_input_data(dataframe):
 
 def create_second_stage_model():
 
-	n_of_input_parameters = 51
+	n_of_input_parameters = 10
 	# Input layer
 	inputs = keras.Input(shape=(n_of_input_parameters,))
 
