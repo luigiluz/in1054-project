@@ -21,7 +21,7 @@ def standardize(dataframe):
 
 
 def reduce_dimensionality(array):
-  pca = PCA(n_components=0.95)
+  pca = PCA(n_components=9)
   pca.fit(array)
   dimesionality_reduced_array = pca.transform(array)
 
