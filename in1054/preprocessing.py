@@ -44,8 +44,8 @@ def convert_to_comma_separated_string(array):
 def convert_results_to_int(dataframe):
   tmp_df = dataframe.copy()
 
-  tmp_df[tmp_df[consts.FLAG_COLUMN_NAME] == consts.REGULAR_FLAG_STR] = consts.REGULAR_FLAG_INT
-  tmp_df[tmp_df[consts.FLAG_COLUMN_NAME] == consts.INJECTED_FLAG_STR] = consts.INJECTED_FLAG_INT
+  tmp_df.loc[tmp_df[consts.FLAG_COLUMN_NAME] == consts.REGULAR_FLAG_STR, consts.FLAG_COLUMN_NAME] = consts.REGULAR_FLAG_INT
+  tmp_df.loc[tmp_df[consts.FLAG_COLUMN_NAME] == consts.INJECTED_FLAG_STR, consts.FLAG_COLUMN_NAME] = consts.INJECTED_FLAG_INT
 
   return tmp_df
 

@@ -15,9 +15,9 @@ def main():
 	print(input_df.head(10))
 
 	prepared_df = utils.prepare_test_dataset(input_df)
-	prepared_df = preprocessing.convert_results_to_int(prepared_df)
+	preprocessed_df = preprocessing.convert_results_to_int(prepared_df)
 	# no preprocess, eu nao posso tentar converter as labels
-	features_df, labels_df = utils.split_features_and_labels(prepared_df)
+	features_df, labels_df = utils.split_features_and_labels(preprocessed_df)
 	preprocessed_features_df = preprocessing.preprocess(features_df)
 
 	# concatenar as labels no preprocessed
