@@ -4,6 +4,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 import in1054.constants as consts
+import in1054.parser as parser
 
 def filter_by_dlc(dataframe, dlc):
   tmp_df = dataframe.copy()
@@ -52,10 +53,11 @@ def convert_results_to_int(dataframe):
 def preprocess(dataframe, output_filepath=None):
   tmp_df = dataframe.copy()
 
-  filtered_df = filter_by_dlc(tmp_df, 8)
-  preprocessed_df = filtered_df.drop(columns=[consts.FLAG_COLUMN_NAME])
+  # filtered_df = filter_by_dlc(tmp_df, 8)
+  # preprocessed_df = filtered_df.drop(columns=[consts.FLAG_COLUMN_NAME])
+  # preprocessed_df = parser.convert_cols_from_hex_string_to_int(preprocessed_df, consts.COLUMNS_TO_CONVERT)
 
-  standardized_dataframe = standardize(preprocessed_df)
+  standardized_dataframe = standardize(tmp_df)
   dimesionality_reduced_array = reduce_dimensionality(standardized_dataframe)
 
   # Standardize data again (according to the paper)
