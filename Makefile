@@ -38,3 +38,6 @@ create_text_vectorizer:
 
 test_second_stage:
 	$(PYTHON) scripts/second_stage_test_script.py
+
+prepare_dataset:
+	$(PYTHON) scripts/prepare_dataset_script.py
