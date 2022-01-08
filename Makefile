@@ -30,5 +30,11 @@ preprocess:
 eval_first_stage:
 	$(PYTHON) scripts/first_stage_eval_script.py
 
-eval_second_stage:
-	$(PYTHON) scripts/second_stage_eval_script.py
+train_second_stage:
+	$(PYTHON) scripts/second_stage_train_script.py
+
+create_text_vectorizer:
+	$(PYTHON) scripts/create_text_vectorizer_script.py
+
+test_second_stage:
+	$(PYTHON) scripts/second_stage_test_script.py
