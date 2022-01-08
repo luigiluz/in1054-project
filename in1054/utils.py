@@ -70,6 +70,9 @@ def train_validation_test_split(dataframe):
 def features_labels_split(dataframe):
 	tmp_df = dataframe.copy()
 
+	tmp_df = preprocessing.filter_by_dlc(tmp_df, dlc=8)
+	tmp_df = parser.convert_cols_from_hex_string_to_int(tmp_df, consts.COLUMNS_TO_CONVERT)
+
 	features_df, labels_df = _split_features_and_labels(tmp_df)
 	prepared_features = _prepare_features(features_df)
 	prepared_labels = _prepare_labels(labels_df)
