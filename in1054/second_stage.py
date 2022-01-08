@@ -14,38 +14,59 @@ def custom_standardization(input_data):
 									'')
 
 
-def _convert_df_to_numpy_array(dataframe):
+def convert_df_to_numpy_array(dataframe):
 
 	return dataframe.to_numpy()
 
 
-# TODO: Consider moving this to a layer of the neural network
-def _convert_text_to_tensor(text_data_array):
-
+def create_text_vectorization_layer(text_data_array, output_path):
+	# Create vectorizer
 	vectorizer = TextVectorization(
 									standardize=custom_standardization,
 									output_mode="int",
 									max_tokens=255,
 									output_sequence_length=10
 									)
+
 	vectorizer.adapt(text_data_array)
-	binary_data = vectorizer(text_data_array)
 
-	return binary_data
+	# Create model
+	model = tf.keras.models.Sequential()
+	model.add(tf.keras.Input(shape=(1,), dtype=tf.string))
+	model.add(vectorizer)
+
+	model.save(output_path, save_format = "tf")
 
 
-def prepare_input_data(dataframe):
-	tmp_df = dataframe.copy()
+def load_text_vectorizer(vectorizer_path):
 
-	df_as_np = _convert_df_to_numpy_array(tmp_df)
-	binary_data = _convert_text_to_tensor(df_as_np)
+	loaded_model = tf.keras.models.load_model(vectorizer_path, compile=False)
+	print("load_text_vectorizer: loaded_model")
+	print(loaded_model.summary())
+	loaded_vectorizer = loaded_model.layers[0]
 
-	return binary_data
+	return loaded_vectorizer
+
+# # TODO: Consider moving this to a layer of the neural network
+# def _convert_text_to_tensor(text_data_array):
+# 	vectorizer.adapt(text_data_array)
+# 	binary_data = vectorizer(text_data_array)
+
+# 	return binary_data
+
+
+# def prepare_input_data(dataframe):
+# 	tmp_df = dataframe.copy()
+
+# 	df_as_np = _convert_df_to_numpy_array(tmp_df)
+# 	#binary_data = _convert_text_to_tensor(df_as_np)
+
+# 	return df_as_np
 
 
 def create_second_stage_model():
 
-	n_of_input_parameters = 10
+	n_of_input_parameters = 9
 	# Input layer
 	inputs = keras.Input(shape=(n_of_input_parameters,))
 
