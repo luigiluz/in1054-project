@@ -5,6 +5,7 @@ from tensorflow.keras import layers
 import re
 import string
 
+@tf.keras.utils.register_keras_serializable()
 def custom_standardization(input_data):
 	stripped_input = tf.strings.regex_replace(input_data,',',' ')
 
