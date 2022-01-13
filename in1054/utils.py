@@ -66,6 +66,27 @@ def random_train_validation_test_split(dataframe):
 	return train_df, val_injected_df, test_df
 
 
+def sequence_train_validation_test_split(dataframe):
+	tmp_df = dataframe.copy()
+
+	regular_df = tmp_df[tmp_df[consts.FLAG_COLUMN_NAME] == consts.REGULAR_FLAG_INT]
+	injected_df = tmp_df[tmp_df[consts.FLAG_COLUMN_NAME] == consts.INJECTED_FLAG_INT]
+
+	train_df = regular_df.iloc[0:consts.NUMBER_OF_TRAINING_SAMPLES, :]
+	train_df = train_df.reset_index()
+
+	val_injected_df = injected_df.iloc[0:consts.NUMBER_OF_INJECTED_VALIDATION_SAMPLES, :]
+	val_injected_df = val_injected_df.reset_index()
+
+	rem_train_df = regular_df.iloc[consts.NUMBER_OF_TRAINING_SAMPLES:-1, :]
+	rem_injected_df = injected_df.iloc[consts.NUMBER_OF_REGULAR_VALIDATION_SAMPLES:-1, :]
+
+	test_df = pd.concat([rem_train_df, rem_injected_df])
+	test_df = test_df.reset_index()
+
+	return train_df, val_injected_df, test_df
+
+
 def features_labels_split(dataframe):
 	tmp_df = dataframe.copy()
 
@@ -86,3 +107,14 @@ def split_concatenated_features_labels(dataframe):
 	labels_df = tmp_df.loc[:, "flag"]
 
 	return features_df, labels_df
+
+
+def reshape_based_on_timestep(data_array, n_of_timesteps=1):
+	n_of_rows = data_array.shape[0]
+	n_of_cols = data_array.shape[1]
+
+	n_of_samples = int(n_of_rows / n_of_timesteps)
+
+	reshaped_data = data_array.reshape((n_of_samples, n_of_timesteps, n_of_cols))
+
+	return reshaped_data

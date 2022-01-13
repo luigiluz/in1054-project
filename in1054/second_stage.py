@@ -100,7 +100,7 @@ def create_second_stage_model(input_data_shape):
 	print(model.summary())
 
 	# Compiles model
-	opt = SGD(learning_rate=0.00001)
+	opt = SGD(learning_rate=0.0000001)
 	model.compile(
 				loss="binary_crossentropy",
 				optimizer=opt,

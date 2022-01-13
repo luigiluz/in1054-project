@@ -8,7 +8,7 @@ data_folder = "/data/"
 filename = "DoS_dataset.csv"
 
 input_filepath = consts.ROOT_PATH + data_folder + filename
-output_filepath = consts.ROOT_PATH + data_folder + "prepared_" + filename
+output_filepath = consts.ROOT_PATH + data_folder + "SEQ_" + filename
 
 def main():
 	input_df = pd.read_csv(input_filepath, names=consts.COLUMNS_NAMES)
@@ -20,9 +20,15 @@ def main():
 	features_df, labels_df = utils.split_features_and_labels(preprocessed_df)
 	preprocessed_features_df = preprocessing.preprocess(features_df)
 
+	print("prepocessed_features_df")
+	print(preprocessed_features_df)
+
+	print("labels_df")
+	print(labels_df)
+
 	# concatenar as labels no preprocessed
 	preprocessed_entire_df = pd.concat([preprocessed_features_df, labels_df], axis=1)
-	train_df, val_injected_df, test_df = utils.random_train_validation_test_split(preprocessed_entire_df)
+	train_df, val_injected_df, test_df = utils.sequence_train_validation_test_split(preprocessed_entire_df)
 	# depois de separar, eu ainda vou precisar preprocessar as labels
 	# ou seja, ainda preciso converter as labels para 0 e 1
 
@@ -33,9 +39,9 @@ def main():
 	print("test_df.info()")
 	print(test_df.info())
 
-	train_df.to_csv(consts.ROOT_PATH + data_folder + "train_" + filename, index=False)
-	val_injected_df.to_csv(consts.ROOT_PATH + data_folder + "validation_" + filename, index=False)
-	test_df.to_csv(consts.ROOT_PATH + data_folder + "test_" + filename, index=False)
+	train_df.to_csv(consts.ROOT_PATH + data_folder + "SEQ_train_" + filename, index=False)
+	val_injected_df.to_csv(consts.ROOT_PATH + data_folder + "SEQ_validation_" + filename, index=False)
+	test_df.to_csv(consts.ROOT_PATH + data_folder + "SEQ_test_" + filename, index=False)
 
 if __name__ == "__main__":
 	main()

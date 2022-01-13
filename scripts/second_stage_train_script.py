@@ -9,8 +9,8 @@ import in1054.utils as utils
 # import in1054.metrics as metrics
 
 # TODO: Put filepaths in constants file
-train_filename = consts.ROOT_PATH + "/data/Ftrain_DoS_dataset.csv"
-validation_filename = consts.ROOT_PATH + "/data/Fvalidation_DoS_dataset.csv"
+train_filename = consts.ROOT_PATH + "/data/SEQ_train_DoS_dataset.csv"
+validation_filename = consts.ROOT_PATH + "/data/SEQ_validation_DoS_dataset.csv"
 #test_filename = consts.ROOT_PATH + "/data/test_DoS_dataset.csv"
 vectorizer_path = consts.ROOT_PATH + "/data/text_vectorizer"
 model_output_path = consts.ROOT_PATH + '/data/ss_model_trained'
@@ -92,9 +92,31 @@ def main():
 		print(validation_data_labels.shape)
 		print("************* end of shapes *****************")
 
-		# Manipulating data for LSTM
-		binary_train_features = binary_train_features.reshape((binary_train_features.shape[0], 1, binary_train_features.shape[1]))
-		binary_validation_features = binary_validation_features.reshape((binary_validation_features.shape[0], 1, binary_validation_features.shape[1]))
+		binary_train_features = utils.reshape_based_on_timestep(binary_train_features, n_of_timesteps=250)
+		binary_validation_features = utils.reshape_based_on_timestep(binary_validation_features, n_of_timesteps=250)
+
+		print("reshaped train features= " + str(binary_train_features.shape))
+		print("reshaped validation features= " + str(binary_validation_features.shape))
+
+		# eu nao preciso converter
+		# so preciso garantir que tenha a quantidade certa de linhas
+		training_data_labels = training_data_labels[0:binary_train_features.shape[0]]#utils.reshape_based_on_timestep(training_data_labels, n_of_timesteps=250)
+		# isso aqui nao pode ser assim
+		# se eu pego apenas as primeiras, só tem 0
+		# o correto é: a primeira metade só tem 0 e a segunda metade só tem 1
+		# TODO: modificar que isso tá uma GAMBIARRA
+		zeros_array = np.repeat(0, int(binary_validation_features.shape[0]/2))
+		ones_array = np.repeat(1, int(binary_validation_features.shape[0]/2))
+		validation_data_labels = np.concatenate([zeros_array, ones_array])
+
+
+		print("training_data_labels")
+		print(training_data_labels)
+		print("validation_data_labels")
+		print(validation_data_labels)
+
+		#binary_train_features = binary_train_features.reshape((binary_train_features.shape[0], 1, binary_train_features.shape[1]))
+		#binary_validation_features = binary_validation_features.reshape((binary_validation_features.shape[0], 1, binary_validation_features.shape[1]))
 
 		# Create second stage model
 		# It creates and compile the model
