@@ -77,3 +77,12 @@ def features_labels_split(dataframe):
 	prepared_labels = _prepare_labels(labels_df)
 
 	return prepared_features, prepared_labels
+
+
+def split_concatenated_features_labels(dataframe):
+	tmp_df = dataframe.copy()
+
+	features_df = tmp_df.loc[:, "concatenated_features"]
+	labels_df = tmp_df.loc[:, "flag"]
+
+	return features_df, labels_df
