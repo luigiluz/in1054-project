@@ -4,6 +4,7 @@ from tensorflow.keras.layers import TextVectorization
 from tensorflow.keras import layers
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.models import Sequential
+from tensorflow.keras.constraints import max_norm
 import re
 import string
 
@@ -77,17 +78,19 @@ def create_second_stage_model(input_data_shape):
 	model.add(keras.layers.Dropout(0.2))
 
 	# Add two initial hidden layers
-	model.add(layers.Dense(9, activation="relu"))
+	model.add(layers.Dense(9, activation="relu", kernel_constraint=max_norm(3)))
 	model.add(layers.Dropout(0.2))
 
-	model.add(layers.Dense(9, activation="relu"))
+	model.add(layers.Dense(9, activation="relu", kernel_constraint=max_norm(3)))
 	model.add(layers.Dropout(0.2))
 
 	# Add two LSTM layers
-	model.add(layers.LSTM(n_of_blocks, input_shape=(input_data_shape), return_sequences=True))
+	#model.add(layers.LSTM(n_of_blocks, input_shape=(input_data_shape), return_sequences=True))
+	model.add(layers.Bidirectional(layers.LSTM(n_of_blocks, input_shape=(input_data_shape), return_sequences=True)))
 	model.add(layers.Dropout(0.2))
 
-	model.add(layers.LSTM(n_of_blocks))
+	#model.add(layers.LSTM(n_of_blocks))
+	model.add(layers.Bidirectional(layers.LSTM(n_of_blocks)))
 
 	# Add output layer
 	num_of_output_classes = 1
@@ -97,13 +100,17 @@ def create_second_stage_model(input_data_shape):
 	print(model.summary())
 
 	# Compiles model
-	opt = SGD(learning_rate=0.01)
-	model.compile(loss="binary_crossentropy", optimizer=opt,
+	opt = SGD(learning_rate=0.00001)
+	model.compile(
+				loss="binary_crossentropy",
+				optimizer=opt,
 				metrics=[
-						tf.keras.metrics.Accuracy()
-						#tf.keras.metrics.Precision()
+						tf.keras.metrics.BinaryAccuracy()
+						#tf.keras.metrics.TruePositives()
+						#tf.keras.metrics.Precision(),
 						#tf.keras.metrics.Recall()
-						]#["accuracy"]
+						]
+						#["accuracy"]
 				)
 
 	return model
