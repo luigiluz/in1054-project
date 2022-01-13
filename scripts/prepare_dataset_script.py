@@ -22,7 +22,7 @@ def main():
 
 	# concatenar as labels no preprocessed
 	preprocessed_entire_df = pd.concat([preprocessed_features_df, labels_df], axis=1)
-	train_df, val_injected_df, test_df = utils.train_validation_test_split(preprocessed_entire_df)
+	train_df, val_injected_df, test_df = utils.random_train_validation_test_split(preprocessed_entire_df)
 	# depois de separar, eu ainda vou precisar preprocessar as labels
 	# ou seja, ainda preciso converter as labels para 0 e 1
 

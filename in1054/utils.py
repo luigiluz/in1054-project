@@ -41,7 +41,7 @@ def _prepare_labels(labels_dataframe):
 	return labels
 
 
-def train_validation_test_split(dataframe):
+def random_train_validation_test_split(dataframe):
 	tmp_df = dataframe.copy()#_prepare_test_dataset(dataframe)
 	# aqui eu tenho todas as colunas ainda
 	regular_df = tmp_df[tmp_df[consts.FLAG_COLUMN_NAME] == consts.REGULAR_FLAG_INT]
