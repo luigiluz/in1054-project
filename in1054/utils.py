@@ -18,6 +18,8 @@ def split_features_and_labels(dataframe):
 	#print(tmp_df.columns)
 
 	labels_df = tmp_df[[consts.FLAG_COLUMN_NAME]]
+	labels_df = labels_df.to_numpy()
+
 	features_df = tmp_df.drop(columns=[consts.FLAG_COLUMN_NAME])
 
 	return features_df, labels_df
