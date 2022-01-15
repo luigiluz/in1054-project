@@ -5,6 +5,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.constraints import max_norm
+from tensorflow.keras import regularizers
 import re
 import string
 
@@ -69,25 +70,35 @@ def load_text_vectorizer(vectorizer_path):
 
 def create_second_stage_model(input_data_shape):
 
-	n_of_blocks = 64
+	n_of_blocks = 4
+	n_of_dense_neurons = 16
 
 	model = Sequential()
 
 	# Add Input Layer
 	model.add(keras.Input(shape=(input_data_shape)))
-	model.add(keras.layers.Dropout(0.2))
+	model.add(keras.layers.Dropout(0.4))
 
 	# Add two initial hidden layers
-	model.add(layers.Dense(9, activation="relu", kernel_constraint=max_norm(3)))
-	model.add(layers.Dropout(0.2))
+	model.add(layers.Dense(n_of_dense_neurons,
+							activation="relu",
+							kernel_constraint=max_norm(3),
+							kernel_regularizer=regularizers.l2(0.0001)))
+	model.add(layers.Dropout(0.4))
 
-	model.add(layers.Dense(9, activation="relu", kernel_constraint=max_norm(3)))
-	model.add(layers.Dropout(0.2))
+	model.add(layers.Dense(n_of_dense_neurons,
+							activation="relu",
+							kernel_constraint=max_norm(3),
+							kernel_regularizer=regularizers.l2(0.0001)))
+	model.add(layers.Dropout(0.4))
 
 	# Add two LSTM layers
 	#model.add(layers.LSTM(n_of_blocks, input_shape=(input_data_shape), return_sequences=True))
-	model.add(layers.Bidirectional(layers.LSTM(n_of_blocks, input_shape=(input_data_shape), return_sequences=True)))
-	model.add(layers.Dropout(0.2))
+	model.add(layers.Bidirectional(layers.LSTM(n_of_blocks,
+									input_shape=(input_data_shape),
+									return_sequences=True,
+									kernel_regularizer=regularizers.l2(0.0001))))
+	model.add(layers.Dropout(0.4))
 
 	#model.add(layers.LSTM(n_of_blocks))
 	model.add(layers.Bidirectional(layers.LSTM(n_of_blocks)))
@@ -100,7 +111,7 @@ def create_second_stage_model(input_data_shape):
 	print(model.summary())
 
 	# Compiles model
-	opt = SGD(learning_rate=0.0000001)
+	opt = SGD(learning_rate=0.00001) # ideal for now 0.000001
 	model.compile(
 				loss="binary_crossentropy",
 				optimizer=opt,
