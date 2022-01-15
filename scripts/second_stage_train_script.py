@@ -67,6 +67,19 @@ def main():
 	fold_var = 1
 	kf = KFold(n_splits=10)
 
+	model_hyperparameters = {
+		"n_of_dense_neurons": 16,
+		"n_of_lstm_blocks": 4,
+		"overfit_avoidance" : {
+			"dropout_rate" : 0.4,
+			"regularizer_rate" : 0.0001,
+			"max_norm": 3
+		},
+		"optimizer": {
+			"learning_rate" : 0.00001
+		}
+	}
+
 	# Initiliaze training
 	for train_index, val_index in kf.split(train_df):
 		print("Split number: " + str(fold_var))
@@ -93,7 +106,7 @@ def main():
 
 		# Create second stage model
 		input_layer_shape = binary_train_features.shape[1:]
-		second_stage_model = second_stage.create_second_stage_model(input_layer_shape)
+		second_stage_model = second_stage.create_second_stage_model(input_layer_shape, model_hyperparameters)
 		print(second_stage_model.summary())
 
 		# # Create callbacks

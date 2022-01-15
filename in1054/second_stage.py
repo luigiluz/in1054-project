@@ -68,50 +68,61 @@ def load_text_vectorizer(vectorizer_path):
 # 	return df_as_np
 
 
-def create_second_stage_model(input_data_shape):
+def create_second_stage_model(input_data_shape, model_hyperparameters):
 
-	n_of_blocks = 4
-	n_of_dense_neurons = 16
+	# Parameters parsing
+	n_of_lstm_blocks = model_hyperparameters["n_of_lstm_blocks"]
+	n_of_dense_neurons = model_hyperparameters["n_of_dense_neurons"]
+
+	dropout_rate = model_hyperparameters["overfit_avoidance"]["dropout_rate"]
+	regularizer_rate = model_hyperparameters["overfit_avoidance"]["regularizer_rate"]
+	my_max_norm = model_hyperparameters["overfit_avoidance"]["max_norm"]
+
+	my_learning_rate = model_hyperparameters["optimizer"]["learning_rate"]
 
 	model = Sequential()
 
 	# Add Input Layer
 	model.add(keras.Input(shape=(input_data_shape)))
-	model.add(keras.layers.Dropout(0.4))
+	model.add(keras.layers.Dropout(dropout_rate))
 
 	# Add two initial hidden layers
 	model.add(layers.Dense(n_of_dense_neurons,
 							activation="relu",
-							kernel_constraint=max_norm(3),
-							kernel_regularizer=regularizers.l2(0.0001)))
-	model.add(layers.Dropout(0.4))
+							kernel_constraint=max_norm(my_max_norm),
+							kernel_regularizer=regularizers.l2(regularizer_rate)))
+
+	model.add(layers.BatchNormalization())
+	model.add(layers.Dropout(dropout_rate))
 
 	model.add(layers.Dense(n_of_dense_neurons,
 							activation="relu",
-							kernel_constraint=max_norm(3),
-							kernel_regularizer=regularizers.l2(0.0001)))
-	model.add(layers.Dropout(0.4))
+							kernel_constraint=max_norm(my_max_norm),
+							kernel_regularizer=regularizers.l2(regularizer_rate)))
+
+	model.add(layers.BatchNormalization())
+	model.add(layers.Dropout(dropout_rate))
 
 	# Add two LSTM layers
-	#model.add(layers.LSTM(n_of_blocks, input_shape=(input_data_shape), return_sequences=True))
-	model.add(layers.Bidirectional(layers.LSTM(n_of_blocks,
+	model.add(layers.Bidirectional(layers.LSTM(n_of_lstm_blocks,
 									input_shape=(input_data_shape),
 									return_sequences=True,
-									kernel_regularizer=regularizers.l2(0.0001))))
-	model.add(layers.Dropout(0.4))
+									kernel_regularizer=regularizers.l2(regularizer_rate))))
 
-	#model.add(layers.LSTM(n_of_blocks))
-	model.add(layers.Bidirectional(layers.LSTM(n_of_blocks)))
+	model.add(layers.BatchNormalization())
+	model.add(layers.Dropout(dropout_rate))
+
+	model.add(layers.Bidirectional(layers.LSTM(n_of_lstm_blocks)))
+
+	model.add(layers.BatchNormalization())
+	model.add(layers.Dropout(dropout_rate))
 
 	# Add output layer
 	num_of_output_classes = 1
 	model.add(layers.Dense(num_of_output_classes, activation="sigmoid"))
 
-	# Summary of the model
-	print(model.summary())
-
 	# Compiles model
-	opt = SGD(learning_rate=0.00001) # ideal for now 0.000001
+	opt = SGD(learning_rate=my_learning_rate) # ideal for now 0.000001
 	model.compile(
 				loss="binary_crossentropy",
 				optimizer=opt,
