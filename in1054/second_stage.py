@@ -79,6 +79,7 @@ def create_second_stage_model(input_data_shape, model_hyperparameters):
 	my_max_norm = model_hyperparameters["overfit_avoidance"]["max_norm"]
 
 	my_learning_rate = model_hyperparameters["optimizer"]["learning_rate"]
+	my_momentum = model_hyperparameters["optimizer"]["momentum"]
 
 	model = Sequential()
 
@@ -88,18 +89,18 @@ def create_second_stage_model(input_data_shape, model_hyperparameters):
 
 	# Add two initial hidden layers
 	model.add(layers.Dense(n_of_dense_neurons,
-							activation="relu",
 							kernel_constraint=max_norm(my_max_norm),
 							kernel_regularizer=regularizers.l2(regularizer_rate)))
 
+	model.add(layers.Activation("relu"))
 	model.add(layers.BatchNormalization())
 	model.add(layers.Dropout(dropout_rate))
 
 	model.add(layers.Dense(n_of_dense_neurons,
-							activation="relu",
 							kernel_constraint=max_norm(my_max_norm),
 							kernel_regularizer=regularizers.l2(regularizer_rate)))
 
+	model.add(layers.Activation("relu"))
 	model.add(layers.BatchNormalization())
 	model.add(layers.Dropout(dropout_rate))
 
@@ -119,10 +120,11 @@ def create_second_stage_model(input_data_shape, model_hyperparameters):
 
 	# Add output layer
 	num_of_output_classes = 1
-	model.add(layers.Dense(num_of_output_classes, activation="sigmoid"))
+	model.add(layers.Dense(num_of_output_classes))
+	model.add(layers.Activation("sigmoid"))
 
 	# Compiles model
-	opt = SGD(learning_rate=my_learning_rate) # ideal for now 0.000001
+	opt = SGD(learning_rate=my_learning_rate, momentum=my_momentum) # ideal for now 0.000001
 	model.compile(
 				loss="binary_crossentropy",
 				optimizer=opt,

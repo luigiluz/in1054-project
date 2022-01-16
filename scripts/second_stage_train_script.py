@@ -10,8 +10,10 @@ import in1054.utils as utils
 # import in1054.metrics as metrics
 
 # TODO: Put filepaths in constants file
-train_filename = consts.ROOT_PATH + "/data/RAND_train_DoS_dataset.csv"
-validation_filename = consts.ROOT_PATH + "/data/RAND_validation_DoS_dataset.csv"
+data_folder_dir = consts.ROOT_PATH + "/data/"
+kind_of_data_prefix = "RAND"
+train_filename = data_folder_dir + kind_of_data_prefix + "_train_DoS_dataset.csv"
+validation_filename = data_folder_dir + kind_of_data_prefix + "_validation_DoS_dataset.csv"
 #test_filename = consts.ROOT_PATH + "/data/test_DoS_dataset.csv"
 vectorizer_path = consts.ROOT_PATH + "/data/text_vectorizer"
 model_output_path = consts.ROOT_PATH + '/data/ss_model_trained'
@@ -42,16 +44,37 @@ def main():
 
 	## Training phase
 	# Model parameteres
-	my_batch_size = 256
-	my_epochs = 5
+	my_batch_size = 1024
+	my_epochs = 100
+
+	model_hyperparameters = {
+		"n_of_dense_neurons": 16,
+		"n_of_lstm_blocks": 4,
+		"overfit_avoidance" : {
+			"dropout_rate" : 0.4,
+			"regularizer_rate" : 0.0001,
+			"max_norm": 3
+		},
+		"optimizer": {
+			"learning_rate" : 0.00001,
+			"momentum" : 0.0
+		}
+	}
 
 	# Directiories
 	saved_models_dir = consts.ROOT_PATH + "/saved_models/"
-	logger_folder_dir = saved_models_dir
+	# logger_folder_dir = saved_models_dir
 
-	my_prefix = "BS.{}.EP.{}.".format(my_batch_size, my_epochs)
+	my_prefix = "DT{}BS{}EP{}NDN{}NLB{}LR{}MM{}".format(
+												kind_of_data_prefix,
+												my_batch_size,
+												my_epochs,
+												model_hyperparameters["n_of_dense_neurons"],
+												model_hyperparameters["n_of_lstm_blocks"],
+												model_hyperparameters["optimizer"]["learning_rate"],
+												model_hyperparameters["optimizer"]["momentum"])
 	my_model_folder = saved_models_dir + my_prefix + "model/"
-	my_logger = logger_folder_dir + my_prefix + "model_log.csv"
+	my_logger = saved_models_dir + my_prefix + "model_log.csv"
 	# TODO: Adicionar alguma coisa para adicionar um nome nome
 	# Talvez algum indice
 	try:
@@ -66,19 +89,6 @@ def main():
 	# KFold iniatialization
 	fold_var = 1
 	kf = KFold(n_splits=10)
-
-	model_hyperparameters = {
-		"n_of_dense_neurons": 16,
-		"n_of_lstm_blocks": 4,
-		"overfit_avoidance" : {
-			"dropout_rate" : 0.4,
-			"regularizer_rate" : 0.0001,
-			"max_norm": 3
-		},
-		"optimizer": {
-			"learning_rate" : 0.00001
-		}
-	}
 
 	# Initiliaze training
 	for train_index, val_index in kf.split(train_df):
