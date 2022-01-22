@@ -4,9 +4,13 @@ import tensorflow as tf
 from sklearn.model_selection import KFold
 import os
 
+import optuna
+
 import in1054.second_stage as second_stage
 import in1054.constants as consts
 import in1054.utils as utils
+
+last_iter = 0
 
 # TODO: Put filepaths in constants file
 data_folder_dir = consts.ROOT_PATH + "/data/"
@@ -20,7 +24,8 @@ model_output_path = consts.ROOT_PATH + '/data/ss_model_trained'
 def get_model_name(k):
 	return 'model_'+str(k)+'.h5'
 
-def main():
+def objective(trial):
+	tf.keras.backend.clear_session()
 	####### Training phase ######
 
 	## Load phase
@@ -51,14 +56,14 @@ def main():
 
 	## Training phase
 	# Model parameteres
-	my_batch_size = 512
-	my_epochs = 22
+	my_batch_size = trial.suggest_categorical("my_batch_size", [512, 1024, 2048, 4096])
+	my_epochs = trial.suggest_categorical("my_epochs", [10, 20, 50])
 
 	model_hyperparameters = {
-		"n_of_dense_neurons": [8, 8],
-		"n_of_lstm_blocks": [4, 4],
+		"n_of_dense_neurons": trial.suggest_categorical("n_of_dense_neurons", [[8, 8], [4,4]]),
+		"n_of_lstm_blocks": trial.suggest_categorical("n_of_lstm_blocks", [[4, 4], [2, 2]]),
 		"overfit_avoidance" : {
-			"dropout_rate" : 0.2,
+			"dropout_rate" : trial.suggest_categorical("dropout_rate", [0.2, 0.4]),
 			"regularizer_rate" : 0.0001,
 			"max_norm": 3
 		},
@@ -90,6 +95,10 @@ def main():
 	try:
 		os.mkdir(my_model_folder)
 	except OSError as error:
+		global last_iter
+		last_iter += 1
+		my_model_folder = saved_models_dir + my_prefix + "model" + str(last_iter) + "/"
+		os.mkdir(my_model_folder)
 		print(error)
 
 	fold_var = 1
@@ -174,10 +183,27 @@ def main():
 	print("VALIDATION_LOSS")
 	print(VALIDATION_LOSS)
 
+	return results['binary_accuracy']
+
 	# # Save trained model
 	# tf.keras.models.save_model(second_stage_model, model_output_path)
 	# print("second stage model properly saved")
 
 
 if __name__ == "__main__":
-	main()
+	study = optuna.create_study(direction="maximize")
+	n_of_hours = 7
+	n_of_minutes = n_of_hours * 60
+	n_of_seconds = n_of_minutes * 60
+	study.optimize(objective, n_trials=100, timeout=n_of_seconds)
+
+	print("Number of finished trials: {}".format(len(study.trials)))
+
+	print("Best trial:")
+	trial = study.best_trial
+
+	print("  Value: {}".format(trial.value))
+
+	print("  Params: ")
+	for key, value in trial.params.items():
+		print("    {}: {}".format(key, value))
