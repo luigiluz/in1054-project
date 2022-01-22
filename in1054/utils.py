@@ -10,7 +10,8 @@ def prepare_test_dataset(dataframe):
 	tmp_df = preprocessing.filter_by_dlc(tmp_df, dlc=8)
 	tmp_df = parser.convert_cols_from_hex_string_to_int(tmp_df, consts.COLUMNS_TO_CONVERT)
 
-	return tmp_df.drop(columns='index')
+	# nao preciso da coluna dlc, ela nao me oferece nada
+	return tmp_df.drop(columns=['index', 'dlc', 'timestamp'])
 
 
 def split_features_and_labels(dataframe):

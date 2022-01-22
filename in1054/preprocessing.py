@@ -58,16 +58,18 @@ def preprocess(dataframe, output_filepath=None):
   # preprocessed_df = parser.convert_cols_from_hex_string_to_int(preprocessed_df, consts.COLUMNS_TO_CONVERT)
 
   standardized_dataframe = standardize(tmp_df)
-  dimesionality_reduced_array = reduce_dimensionality(standardized_dataframe)
+  #dimesionality_reduced_array = reduce_dimensionality(standardized_dataframe)
 
   # Standardize data again (according to the paper)
-  dimesionality_reduced_array = standardize(dimesionality_reduced_array)
-  dimesionality_reduced_array = np.round(dimesionality_reduced_array, 4)
+  #dimesionality_reduced_array = standardize(dimesionality_reduced_array)
+
+  #dimesionality_reduced_array = np.round(dimesionality_reduced_array, 4)
 
   #converted_array = convert_to_comma_separated_string(dimesionality_reduced_array)
   #converted_df = pd.DataFrame(converted_array, columns = [consts.CONCATENATED_FEATURES_COLUMN_NAME])
 
-  converted_df = pd.DataFrame(dimesionality_reduced_array)
+  #converted_df = pd.DataFrame(dimesionality_reduced_array)
+  converted_df = pd.DataFrame(standardized_dataframe, columns = [consts.COLUMNS_TO_CONVERT])
 
   if (output_filepath==None):
     return converted_df

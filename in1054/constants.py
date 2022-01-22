@@ -23,6 +23,7 @@ COLUMNS_NAMES = ["timestamp",
                  DATA_7_COLUMN_NAME,
                  FLAG_COLUMN_NAME]
 
+# Essas aqui são as features
 COLUMNS_TO_CONVERT = [
                 ID_COLUMN_NAME,
                 DATA_0_COLUMN_NAME,
@@ -33,6 +34,19 @@ COLUMNS_TO_CONVERT = [
                 DATA_5_COLUMN_NAME,
                 DATA_6_COLUMN_NAME,
                 DATA_7_COLUMN_NAME
+]
+
+FEATURES_AND_LABEL_COLUMNS = [
+                ID_COLUMN_NAME,
+                DATA_0_COLUMN_NAME,
+                DATA_1_COLUMN_NAME,
+                DATA_2_COLUMN_NAME,
+                DATA_3_COLUMN_NAME,
+                DATA_4_COLUMN_NAME,
+                DATA_5_COLUMN_NAME,
+                DATA_6_COLUMN_NAME,
+                DATA_7_COLUMN_NAME,
+                FLAG_COLUMN_NAME
 ]
 
 METRICS_COLUMNS = [

@@ -10,7 +10,7 @@ import in1054.utils as utils
 
 # TODO: Put filepaths in constants file
 data_folder_dir = consts.ROOT_PATH + "/data/"
-kind_of_data_prefix = "RAND_nokf"
+kind_of_data_prefix = "RAND_nokf_noPCA"
 train_filename = data_folder_dir + kind_of_data_prefix + "_train_DoS_dataset.csv"
 validation_filename = data_folder_dir + kind_of_data_prefix + "_validation_DoS_dataset.csv"
 vectorizer_path = consts.ROOT_PATH + "/data/text_vectorizer"
@@ -55,8 +55,8 @@ def main():
 	my_epochs = 22
 
 	model_hyperparameters = {
-		"n_of_dense_neurons": [32, 32],
-		"n_of_lstm_blocks": [8, 8],
+		"n_of_dense_neurons": [8, 8],
+		"n_of_lstm_blocks": [4, 4],
 		"overfit_avoidance" : {
 			"dropout_rate" : 0.2,
 			"regularizer_rate" : 0.0001,
