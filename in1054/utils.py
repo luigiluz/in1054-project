@@ -18,7 +18,7 @@ def split_features_and_labels(dataframe):
 	#print(tmp_df.columns)
 
 	labels_df = tmp_df[[consts.FLAG_COLUMN_NAME]]
-	labels_df = labels_df.to_numpy()
+	#labels_df = labels_df.to_numpy()
 
 	features_df = tmp_df.drop(columns=[consts.FLAG_COLUMN_NAME])
 
@@ -53,19 +53,20 @@ def random_train_validation_test_split(dataframe):
 	regular_df.drop(train_df.index, inplace=True)
 	train_df = train_df.reset_index()
 
-	#val_regular_df = regular_df.sample(n=consts.NUMBER_OF_REGULAR_VALIDATION_SAMPLES)
+	val_regular_df = regular_df.sample(n=consts.NUMBER_OF_REGULAR_VALIDATION_SAMPLES)
 	val_injected_df = injected_df.sample(n=consts.NUMBER_OF_INJECTED_VALIDATION_SAMPLES)
 
-	#regular_df.drop(val_regular_df.index, inplace=True)
 	injected_df.drop(val_injected_df.index, inplace=True)
+	regular_df.drop(val_regular_df.index, inplace=True)
 	val_injected_df = val_injected_df.reset_index()
+	val_regular_df = val_regular_df.reset_index()
 
-	#validation_df = pd.concat([val_regular_df, val_injected_df])
-	#validation_df = validation_df.reset_index()
+	validation_df = pd.concat([val_regular_df, val_injected_df])
+	validation_df = validation_df.reset_index()
 	test_df = pd.concat([regular_df, injected_df])
 	test_df = test_df.reset_index()
 
-	return train_df, val_injected_df, test_df
+	return train_df, validation_df, test_df
 
 
 def sequence_train_validation_test_split(dataframe):

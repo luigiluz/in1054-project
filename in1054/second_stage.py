@@ -85,10 +85,10 @@ def create_second_stage_model(input_data_shape, model_hyperparameters):
 
 	# Add Input Layer
 	model.add(keras.Input(shape=(input_data_shape)))
-	model.add(keras.layers.Dropout(dropout_rate))
+	#model.add(keras.layers.Dropout(dropout_rate))
 
 	# Add two initial hidden layers
-	model.add(layers.Dense(n_of_dense_neurons,
+	model.add(layers.Dense(n_of_dense_neurons[0],
 							kernel_constraint=max_norm(my_max_norm),
 							kernel_regularizer=regularizers.l2(regularizer_rate)))
 
@@ -96,7 +96,7 @@ def create_second_stage_model(input_data_shape, model_hyperparameters):
 	model.add(layers.BatchNormalization())
 	model.add(layers.Dropout(dropout_rate))
 
-	model.add(layers.Dense(n_of_dense_neurons,
+	model.add(layers.Dense(n_of_dense_neurons[1],
 							kernel_constraint=max_norm(my_max_norm),
 							kernel_regularizer=regularizers.l2(regularizer_rate)))
 
@@ -105,7 +105,7 @@ def create_second_stage_model(input_data_shape, model_hyperparameters):
 	model.add(layers.Dropout(dropout_rate))
 
 	# Add two LSTM layers
-	model.add(layers.Bidirectional(layers.LSTM(n_of_lstm_blocks,
+	model.add(layers.Bidirectional(layers.LSTM(n_of_lstm_blocks[0],
 									input_shape=(input_data_shape),
 									return_sequences=True,
 									kernel_regularizer=regularizers.l2(regularizer_rate))))
@@ -113,7 +113,7 @@ def create_second_stage_model(input_data_shape, model_hyperparameters):
 	model.add(layers.BatchNormalization())
 	model.add(layers.Dropout(dropout_rate))
 
-	model.add(layers.Bidirectional(layers.LSTM(n_of_lstm_blocks)))
+	model.add(layers.Bidirectional(layers.LSTM(n_of_lstm_blocks[1])))
 
 	model.add(layers.BatchNormalization())
 	model.add(layers.Dropout(dropout_rate))

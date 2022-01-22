@@ -30,8 +30,8 @@ preprocess:
 eval_first_stage:
 	$(PYTHON) scripts/first_stage_eval_script.py
 
-train_second_stage:
-	$(PYTHON) scripts/second_stage_train_script.py
+kf_train_second_stage:
+	$(PYTHON) scripts/kf_second_stage_train_script.py
 
 create_text_vectorizer:
 	$(PYTHON) scripts/create_text_vectorizer_script.py
@@ -41,3 +41,6 @@ test_second_stage:
 
 prepare_dataset:
 	$(PYTHON) scripts/prepare_dataset_script.py
+
+single_train_second_stage:
+	$(PYTHON) scripts/single_second_stage_train_script.py

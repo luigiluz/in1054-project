@@ -44,14 +44,14 @@ def main():
 
 	## Training phase
 	# Model parameteres
-	my_batch_size = 1024
-	my_epochs = 100
+	my_batch_size = 256
+	my_epochs = 20
 
 	model_hyperparameters = {
 		"n_of_dense_neurons": 16,
 		"n_of_lstm_blocks": 4,
 		"overfit_avoidance" : {
-			"dropout_rate" : 0.4,
+			"dropout_rate" : 0.2,
 			"regularizer_rate" : 0.0001,
 			"max_norm": 3
 		},
@@ -65,14 +65,16 @@ def main():
 	saved_models_dir = consts.ROOT_PATH + "/saved_models/"
 	# logger_folder_dir = saved_models_dir
 
-	my_prefix = "DT{}BS{}EP{}NDN{}NLB{}LR{}MM{}".format(
+	my_prefix = "DT{}BS{}EP{}NDN{}NLB{}LR{}MM{}DPR{}RR{}".format(
 												kind_of_data_prefix,
 												my_batch_size,
 												my_epochs,
 												model_hyperparameters["n_of_dense_neurons"],
 												model_hyperparameters["n_of_lstm_blocks"],
 												model_hyperparameters["optimizer"]["learning_rate"],
-												model_hyperparameters["optimizer"]["momentum"])
+												model_hyperparameters["optimizer"]["momentum"],
+												model_hyperparameters["overfit_avoidance"]["dropout_rate"],
+												model_hyperparameters["overfit_avoidance"]["regularizer_rate"])
 	my_model_folder = saved_models_dir + my_prefix + "model/"
 	my_logger = saved_models_dir + my_prefix + "model_log.csv"
 	# TODO: Adicionar alguma coisa para adicionar um nome nome
@@ -88,7 +90,7 @@ def main():
 
 	# KFold iniatialization
 	fold_var = 1
-	kf = KFold(n_splits=10)
+	kf = KFold(n_splits=1)
 
 	# Initiliaze training
 	for train_index, val_index in kf.split(train_df):
@@ -106,6 +108,9 @@ def main():
 
 		train_features_np = second_stage.convert_df_to_numpy_array(training_data_features)
 		validation_features_np = second_stage.convert_df_to_numpy_array(validation_data_features)
+
+		training_data_labels_np = training_data_labels.to_numpy()
+		validation_data_labels_np = validation_data_labels.to_numpy()
 
 		# If using text vectorizer, this needs to be changed
 		binary_train_features = train_features_np
@@ -136,17 +141,17 @@ def main():
 
 		# Fit second stage model
 		second_stage_model.fit(binary_train_features,
-								training_data_labels,
+								training_data_labels_np,
 								batch_size=my_batch_size,
 								epochs=my_epochs,
 								callbacks=callbacks_list,
-								validation_data=(binary_validation_features, validation_data_labels))
+								validation_data=(binary_validation_features, validation_data_labels_np))
 
 		# Load best model to evaluate the performance of the model
 		second_stage_model.load_weights(my_model_folder + get_model_name(fold_var))
 
 		results = second_stage_model.evaluate(x = binary_validation_features,
-												y= validation_data_labels)
+												y= validation_data_labels_np)
 		results = dict(zip(second_stage_model.metrics_names,results))
 
 		VALIDATION_ACCURACY.append(results['binary_accuracy'])
