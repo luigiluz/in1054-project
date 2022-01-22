@@ -56,14 +56,16 @@ def objective(trial):
 
 	## Training phase
 	# Model parameteres
-	my_batch_size = trial.suggest_categorical("my_batch_size", [512, 1024, 2048, 4096])
-	my_epochs = trial.suggest_categorical("my_epochs", [10, 20, 50])
+	random_seed = 1
+
+	my_batch_size = trial.suggest_categorical("my_batch_size", [512, 1024, 2048])
+	my_epochs = trial.suggest_categorical("my_epochs", [50])
 
 	model_hyperparameters = {
-		"n_of_dense_neurons": trial.suggest_categorical("n_of_dense_neurons", [[8, 8], [4,4]]),
+		"n_of_dense_neurons": trial.suggest_categorical("n_of_dense_neurons", [[8,4], [8, 8], [4,4]]),
 		"n_of_lstm_blocks": trial.suggest_categorical("n_of_lstm_blocks", [[4, 4], [2, 2]]),
 		"overfit_avoidance" : {
-			"dropout_rate" : trial.suggest_categorical("dropout_rate", [0.2, 0.4]),
+			"dropout_rate" : trial.suggest_categorical("dropout_rate", [0.0, 0.2, 0.4]),
 			"regularizer_rate" : 0.0001,
 			"max_norm": 3
 		},
@@ -76,7 +78,8 @@ def objective(trial):
 	# Directiories
 	saved_models_dir = consts.ROOT_PATH + "/saved_models/"
 
-	my_prefix = "DT{}BS{}EP{}NDN{},{}NLB{},{}LR{}MM{}DPR{}RR{}".format(
+	my_prefix = "SEED{}DT{}BS{}EP{}NDN{},{}NLB{},{}LR{}MM{}DPR{}RR{}".format(
+												random_seed,
 												kind_of_data_prefix,
 												my_batch_size,
 												my_epochs,
@@ -89,7 +92,6 @@ def objective(trial):
 												model_hyperparameters["overfit_avoidance"]["dropout_rate"],
 												model_hyperparameters["overfit_avoidance"]["regularizer_rate"])
 	my_model_folder = saved_models_dir + my_prefix + "model/"
-	my_logger = my_model_folder + "model_log.csv"
 	# TODO: Adicionar alguma coisa para adicionar um nome nome
 	# Talvez algum indice
 	try:
@@ -101,6 +103,8 @@ def objective(trial):
 		os.mkdir(my_model_folder)
 		print(error)
 
+	my_logger = my_model_folder + "model_log.csv"
+
 	fold_var = 1
 
 	# Lists to hold metrics
@@ -110,6 +114,10 @@ def objective(trial):
 	# Initiliaze training
 	training_data = train_df
 	validation_data = validation_df
+
+	# Setting random seeds
+	np.random.seed(random_seed)
+	tf.random.set_seed(random_seed)
 
 	# Preprocessing phase
 	# Convert data to numpy array
@@ -191,8 +199,9 @@ def objective(trial):
 
 
 if __name__ == "__main__":
-	study = optuna.create_study(direction="maximize")
-	n_of_hours = 7
+	study = optuna.create_study(direction="maximize",
+								sampler=optuna.samplers.RandomSampler(1))
+	n_of_hours = 4
 	n_of_minutes = n_of_hours * 60
 	n_of_seconds = n_of_minutes * 60
 	study.optimize(objective, n_trials=100, timeout=n_of_seconds)
