@@ -44,3 +44,6 @@ prepare_dataset:
 
 single_train_second_stage:
 	$(PYTHON) scripts/single_second_stage_train_script.py
+
+test_multi_stage:
+	$(PYTHON) scripts/multi_stage_script.py
