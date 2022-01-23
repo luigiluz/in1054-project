@@ -154,6 +154,14 @@ def evaluate_second_stage_model(model, test_features, test_labels):
 
 def second_stage_model_predict(model, test_features):
 
+	threshold = 0.5
+
 	predictions = model.predict(test_features)
+
+	predictions_true = predictions > threshold
+	predictions_false = predictions <= threshold
+
+	predictions[predictions_true] = 1
+	predictions[predictions_false] = 0
 
 	return predictions
