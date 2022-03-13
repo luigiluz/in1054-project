@@ -98,3 +98,69 @@ def check_pybloomfilter_single(single_value, pybloomfilter):
 	results_as_int = _convert_bloom_filter_results(bf_results)
 
 	return results_as_int
+
+
+class BloomFilterDict():
+  def __init__(self):
+    self._bf_dict = dict()
+
+
+  def __is__key__in__dict(self, my_key):
+    return my_key in self._bf_dict.keys()
+
+
+  def __add__key__value__pair(self, current_pair):
+    current_key = current_pair[0]
+    current_value = current_pair[1]
+
+    if self.__is__key__in__dict(current_key):
+      #print("Key already in dict")
+      self._bf_dict[current_key].add(current_value)
+    else:
+      #print("Adding {} key to the dict".format(current_key))
+      self._bf_dict[current_key] = pybloom.ScalableBloomFilter(mode=pybloom.ScalableBloomFilter.SMALL_SET_GROWTH)
+      self._bf_dict[current_key].add(current_value)
+
+
+  def povoate_dict(self, input_list):
+    for list_index in range(len(input_list)):
+      current_pair = input_list[list_index]
+      self.__add__key__value__pair(current_pair)
+
+
+  def single_query(self, query_pair):
+    query_key = query_pair[0]
+    query_value = query_pair[1]
+
+    if self.__is__key__in__dict(query_key):
+      if query_value in self._bf_dict[query_key]:
+		# TODO: Tá na logica de que 0 é normal e 1 é ataque
+        return 0
+      else:
+        return 1
+    else:
+      return 1
+
+
+  def multiple_query(self, query_list):
+    results_list = []
+
+    for list_index in range(len(query_list)):
+      current_query_pair = query_list[list_index]
+      current_result = self.single_query(current_query_pair)
+      results_list.append(current_result)
+
+    return results_list
+
+
+  def get_memory_consumption(self):
+    bits_count = 0
+    for my_key in self._bf_dict.keys():
+      for filter in self._bf_dict[my_key].filters:
+        current_filter_len = len(filter.bitarray)
+        bits_count += current_filter_len
+
+    total_bytes = bits_count / 8
+    total_kbytes = total_bytes / 1024
+
+    return total_kbytes

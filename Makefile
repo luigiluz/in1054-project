@@ -47,3 +47,6 @@ single_train_second_stage:
 
 test_multi_stage:
 	$(PYTHON) scripts/multi_stage_script.py
+
+improvement_eval:
+	$(PYTHON) scripts/improvement_evaluation_script.py

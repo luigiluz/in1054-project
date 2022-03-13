@@ -8,7 +8,7 @@ def prepare_test_dataset(dataframe):
 	tmp_df = dataframe.copy()
 
 	tmp_df = preprocessing.filter_by_dlc(tmp_df, dlc=8)
-	tmp_df = parser.convert_cols_from_hex_string_to_int(tmp_df, consts.COLUMNS_TO_CONVERT)
+	#tmp_df = parser.convert_cols_from_hex_string_to_int(tmp_df, consts.COLUMNS_TO_CONVERT)
 
 	# nao preciso da coluna dlc, ela nao me oferece nada
 	return tmp_df.drop(columns=['index', 'dlc', 'timestamp'])
@@ -19,9 +19,11 @@ def split_features_and_labels(dataframe):
 	#print(tmp_df.columns)
 
 	labels_df = tmp_df[[consts.FLAG_COLUMN_NAME]]
+	#labels_df = labels_df.drop(columns=["index"])
 	#labels_df = labels_df.to_numpy()
 
 	features_df = tmp_df.drop(columns=[consts.FLAG_COLUMN_NAME])
+	#features_df = features_df.drop(columns=["index"])
 
 	return features_df, labels_df
 
@@ -68,6 +70,26 @@ def random_train_validation_test_split(dataframe):
 	test_df = test_df.reset_index()
 
 	return train_df, validation_df, test_df
+
+def random_train_test_split(dataframe):
+	tmp_df = dataframe.copy()
+
+	regular_df = tmp_df[tmp_df[consts.FLAG_COLUMN_NAME] == consts.REGULAR_FLAG_INT]
+	injected_df = tmp_df[tmp_df[consts.FLAG_COLUMN_NAME] == consts.INJECTED_FLAG_INT]
+
+	test_regular_df = regular_df.sample(n=200000)
+	test_injected_df = injected_df.sample(n=consts.NUMBER_OF_INJECTED_VALIDATION_SAMPLES)
+
+	injected_df.drop(test_injected_df.index, inplace=True)
+	regular_df.drop(test_regular_df.index, inplace=True)
+
+	test_df = pd.concat([test_regular_df, test_injected_df])
+	test_df = test_df.reset_index()
+
+	train_df = regular_df
+	train_df = train_df.reset_index()
+
+	return train_df, test_df
 
 
 def sequence_train_validation_test_split(dataframe):
